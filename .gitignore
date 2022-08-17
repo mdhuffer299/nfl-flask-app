@@ -1,3 +1,10 @@
+# Exclude Data Files
+/raw-data
+/older-files
+
+# OSX generated files
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -127,3 +134,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Idea Files
+.idea/
