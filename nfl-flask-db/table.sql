@@ -11,4 +11,6 @@ WHERE full_name = 'Arizona Cardinals'
 
 SELECT
     *
-FROM logos
+FROM games
+WHERE week > 17
+LIMIT 500
