@@ -1,9 +1,9 @@
 from utils.custom_views import JsonMethodView
-from utils.db_conn import get_db_connection
-import json
+from utils.db_conn import Client
 from http import HTTPStatus
 from marshmallow import Schema, fields
-from flask import request, render_template
+from flask import request
+
 
 class TeamLogo(JsonMethodView):
 
@@ -13,12 +13,9 @@ class TeamLogo(JsonMethodView):
     def post(self):
         # Get the data from the request
         request_data = self.TeamLogoSchema().loads(request.data)
-        db_conn = get_db_connection()
-        cur = db_conn.cursor()
-        cur.execute(f"SELECT team_logo FROM logos WHERE team_abr = '{request_data.get('team_abr')}';")
-        logo = cur.fetchall()
-        cur.close()
-        db_conn.close()
+        db = Client()
+        logo = db.cursor.execute(f"SELECT team_logo FROM logos WHERE team_abr = '{request_data.get('team_abr')}';")
+        db.close_conn()
 
         team_logo_response = dict(team_logo_url=logo[0][0])
 
@@ -32,12 +29,9 @@ class Teams(JsonMethodView):
 
     def get(self):
         # Get the data from the request
-        db_conn = get_db_connection()
-        cur = db_conn.cursor()
-        cur.execute(f"SELECT team_abr FROM logos;")
-        teams = cur.fetchall()
-        cur.close()
-        db_conn.close()
+        db = Client()
+        teams = db.query(f"SELECT team_abr FROM logos;")
+        db.close_conn()
 
         team_dict_response = {idx: team[0] for idx, team in enumerate(teams)}
 
@@ -49,12 +43,9 @@ class Teams(JsonMethodView):
         team_list = request_data.get('team_abr_list')
         teams = tuple(team_list)
 
-        db_conn = get_db_connection()
-        cur = db_conn.cursor()
-        cur.execute(f"SELECT team_abr FROM logos WHERE team_abr IN {teams};")
-        teams = cur.fetchall()
-        cur.close()
-        db_conn.close()
+        db = Client()
+        teams = db.query(query=f"SELECT team_abr FROM logos WHERE team_abr IN {teams};")
+        db.close_conn()
 
         team_dict_response = {idx: team[0] for idx, team in enumerate(teams)}
 
