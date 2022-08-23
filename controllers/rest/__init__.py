@@ -1,10 +1,12 @@
 from flask import Flask, Blueprint
 from controllers.rest.teams import TeamLogo, Teams
 from controllers.rest.games import Games
+from flask_cors import CORS
 
 
 def create_rest_app(config):
     app = Flask(__name__)
+    CORS(app, resources={r"/*": {"origins": "*", "allow_headers": "*", "expose_headers": "*"}})
     app.config.from_object(config)
 
     rest_blueprint = Blueprint('rest', __name__,

@@ -14,3 +14,8 @@ SELECT
 FROM games
 WHERE week > 17
 LIMIT 500
+
+SELECT
+    *
+FROM logos
+WHERE team_abr = 'CHI'

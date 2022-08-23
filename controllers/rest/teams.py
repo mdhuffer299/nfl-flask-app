@@ -3,6 +3,7 @@ from utils.db_conn import Client
 from http import HTTPStatus
 from marshmallow import Schema, fields
 from flask import request
+import logging
 
 
 class TeamLogo(JsonMethodView):
@@ -14,7 +15,7 @@ class TeamLogo(JsonMethodView):
         # Get the data from the request
         request_data = self.TeamLogoSchema().loads(request.data)
         db = Client()
-        logo = db.cursor.execute(f"SELECT team_logo FROM logos WHERE team_abr = '{request_data.get('team_abr')}';")
+        logo = db.query(f"SELECT team_logo FROM logos WHERE team_abr = '{request_data.get('team_abr')}';")
         db.close_conn()
 
         team_logo_response = dict(team_logo_url=logo[0][0])
